@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+<h1>My Orders</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.product.getProductName }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>{{ order.status }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">You have no orders.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

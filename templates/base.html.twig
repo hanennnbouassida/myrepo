@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Home | My Website{% endblock %}</title>
+    <link rel="stylesheet" href="{{ asset('assets/styles/style.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</head>
+<body>
+
+    {# Header Section #}
+    <header>
+        <div class="logo">
+            <p>My Website LOGO</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ path('home') }}">Home</a></li>
+                <li><a href="{{ path('shop') }}">Shop</a></li>
+                <li><a href="{{ path('brands') }}">Brands</a></li>
+                <li><a href="{{ path('about') }}">About (Contact)</a></li>
+              
+            </ul>
+        </nav>
+
+          <!-- Search Bar -->
+    <div class="search-bar">
+        <form action="" method="GET">
+            <input type="text" name="q" placeholder="Search products..." required>
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+
+        <div class="header-actions">
+            <div class="shopping-cart">
+    <a href="{{ path('cart') }}">
+        <i class="fa-solid fa-cart-shopping" style="color: #0ca49a;"></i>
+        <span>Cart</span>
+    </a>
+</div>
+    {#---------------------------------------------------------------------#}
+
+{% if app.user %}
+        {% if 'ROLE_BUSINESS' in app.user.roles %}
+            <!-- Business Dashboard Button -->
+            <div class="dashboard-btn">
+                <a href="{{ path('dashboard_business') }}">
+                    <i class="fas fa-store-alt" style="color: #0ca49a;" ></i> Dashboard
+                </a>
+            </div>
+      
+        {% endif %}
+    {% endif %}
+    {#---------------------------------------------------------------------#}
+           <div class="auth-links">
+    {% if app.user %}
+        <a href="{{ path('app_logout') }}" class="btn-outlined btn-outlined-danger">Logout</a>
+    {% else %}
+        <a href="{{ path('app_login') }}" class="btn-outlined">Login</a> |
+        <a href="{{ path('app_register_client') }}" class="btn-outlined btn-outlined-primary">Sign Up</a>
+    {% endif %}
+</div>
+        </div>
+    </header>
+
+    {# Main Content Block #}
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {# Footer Section #}
+    <footer class="site-footer">
+    <div class="footer-container">
+        <!-- Logo and Slogan Section -->
+        <div class="footer-section logo-section">
+            <div class="footer-logo">
+                <p class="logo-text">GrowBiz</p>
+                <p class="slogan">Empowering Small Businesses</p>
+            </div>
+        </div>
+
+        <!-- Quick Links Section -->
+        <div class="footer-section links-section">
+            <h3 class="footer-title">Quick Links</h3>
+            <ul class="footer-menu">
+                <li><a href="{{ path('home') }}">Home</a></li>
+                <li><a href="{{ path('shop') }}">Shop</a></li>
+                <li><a href="{{ path('brands') }}">Brands</a></li>
+                <li><a href="{{ path('about') }}">About (Contact)</a></li>
+            </ul>
+        </div>
+
+        <!-- Support Section -->
+        <div class="footer-section support-section">
+            <h3 class="footer-title">Support</h3>
+            <ul class="footer-menu">
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Submit a Ticket</a></li>
+                <li><a href="#">Theme Tweak</a></li>
+            </ul>
+        </div>
+
+        <!-- Resources Section -->
+        <div class="footer-section resources-section">
+            <h3 class="footer-title">Resources</h3>
+            <ul class="footer-menu">
+                <li><a href="#">Showcase</a></li>
+                <li><a href="#">WidgetKit</a></li>
+                <li><a href="#">Affiliates</a></li>
+            </ul>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="footer-section contact-section">
+            <h3 class="footer-title">Contact Us</h3>
+            <div class="contact-info">
+                <p><i class="fas fa-envelope"></i> <a href="mailto:info@growbiz.com">info@GrowBiz.com</a></p>
+                <p><i class="fas fa-phone"></i> 44408189</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copyright Section -->
+    <div class="footer-bottom">
+        <div class="footer-legal">
+            <p>&copy; 2025 GrowBiz. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+</body>
+
+<style>
+.btn-outlined {
+    background-color: black; /* Transparent background */
+    border: 2px solid white;  /* White outlined border */
+    color:rgb(149, 37, 37);  
+    padding: 8px 16px;            /* Padding for better click area */
+    border-radius: 20px;           /* Rounded corners */
+    font-size: 14px;              /* Text size */
+    font-weight: 500;             /* Medium font weight */
+    cursor: pointer;              /* Pointer cursor on hover */
+    transition: all 0.3s ease;    /* Smooth hover effects */
+    text-decoration: none;        /* Remove underline if it's an <a> tag */
+    display: inline-block; 
+      border-color:rgb(255, 255, 255); /* Red border */
+}
+
+/* Hover effect */
+.btn-outlined:hover {
+    background-color:rgb(255, 255, 255);     /* Fill with color on hover */
+    color: white;                 /* Text changes to white */
+} 
+.dashboard-btn{
+
+}
+</style>
+</html>

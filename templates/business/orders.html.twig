@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>Orders</h1>
+    <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.product.getProductName }}</td>
+                        <td>{{ order.quantity }}</td>
+                        <td>{{ order.status }}</td>
+                        <td>
+                            {% if order.status in ['Pending', 'Confirmed'] %}
+                                <form method="post" action="{{ path('update_order_status', {id: order.id}) }}">
+                                    <button name="status" value="Confirmed" class="btn btn-success">Confirm</button>
+                                    <button name="status" value="Denied" class="btn btn-danger">Deny</button>
+                                    <button name="status" value="Canceled" class="btn btn-warning">Cancel</button>
+                                    <button name="status" value="Delayed" class="btn btn-secondary">Delay</button>
+                                </form>
+                            {% else %}
+                                <p>No actions available</p>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

@@ -1,0 +1,235 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    .admin-dashboard {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #0ca49a;
+    }
+    
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    
+    .admin-table tr {
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .admin-table td {
+        padding: 20px 15px;
+        vertical-align: top;
+    }
+    
+    .section-title {
+        font-size: 1.3rem;
+        color: #2c3e50;
+        margin: 0 0 10px 0;
+    }
+    
+    .section-subtitle {
+        font-size: 0.95rem;
+        color: #7f8c8d;
+        margin: 0;
+    }
+    
+    .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+    }
+    
+    .btn {
+        padding: 10px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .btn-primary {
+        background-color: #0ca49a;
+        color: white;
+        border: 1px solid #0ca49a;
+    }
+    
+    .btn-primary:hover {
+        background-color: #0b938a;
+    }
+    
+    .btn-danger {
+        background-color: #e74c3c;
+        color: white;
+        border: 1px solid #e74c3c;
+    }
+    
+    .btn-danger:hover {
+        background-color: #c0392b;
+    }
+    
+    .btn-secondary {
+        background-color: #34495e;
+        color: white;
+        border: 1px solid #34495e;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #2c3e50;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+        margin: 15px 0;
+    }
+    
+    .stat-card {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        border-left: 4px solid #0ca49a;
+    }
+    
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+</style>
+
+<div class="admin-dashboard">
+    <div class="dashboard-header">
+        <h1>Admin Dashboard</h1>
+        {% if app.user %}
+        <div>
+            Logged in as <strong>{{ app.user.userIdentifier }}</strong>
+            <a href="{{ path('app_logout') }}" class="btn btn-danger">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <h2>Dashboard Overview</h2>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div>Registered Businesses</div>
+            <div class="stat-value">142</div>
+        </div>
+        <div class="stat-card">
+            <div>Products Listed</div>
+            <div class="stat-value">1,842</div>
+        </div>
+        <div class="stat-card">
+            <div>Total Users</div>
+            <div class="stat-value">3,215</div>
+        </div>
+        <div class="stat-card">
+            <div>Categories</div>
+            <div class="stat-value">28</div>
+        </div>
+    </div>
+
+    <table class="admin-table">
+        <!-- Row 1 -->
+        <tr>
+            <td>
+                <h3 class="section-title">Manage Admins</h3>
+                <p class="section-subtitle">Create and manage administrator accounts</p>
+            </td>
+            <td>
+                <div class="btn-group">
+                    <a href="{{ path('register_admin') }}" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i> Register New Admin
+                    </a>
+                </div>
+            </td>
+        </tr>
+        
+        <!-- Row 2 -->
+        <tr>
+            <td>
+                <h3 class="section-title">Manage Categories</h3>
+                <p class="section-subtitle">Create, edit and organize product categories</p>
+            </td>
+            <td>
+                <div class="btn-group">
+                    <a href="{{ path('manage_categories') }}" class="btn btn-primary">
+                        <i class="fas fa-tags"></i> Manage Categories
+                    </a>
+                </div>
+            </td>
+        </tr>
+        
+        <!-- Row 3 -->
+        <tr>
+            <td>
+                <h3 class="section-title">Manage Clients</h3>
+                <p class="section-subtitle">View and manage customer accounts</p>
+            </td>
+            <td>
+                <div class="btn-group">
+                    <a href="{{ path('manage_clients') }}" class="btn btn-primary">
+                        <i class="fas fa-users"></i> Manage Clients
+                    </a>
+                </div>
+            </td>
+        </tr>
+        
+        <!-- Row 4 -->
+        <tr>
+            <td>
+                <h3 class="section-title">Manage Businesses</h3>
+                <p class="section-subtitle">Approve and manage business accounts</p>
+            </td>
+            <td>
+                <div class="btn-group">
+                    <a href="{{ path('manage_businesses') }}" class="btn btn-primary">
+                        <i class="fas fa-store"></i> Manage Businesses
+                    </a>
+                </div>
+            </td>
+        </tr>
+        
+        <!-- Row 5 -->
+        <tr>
+            <td>
+                <h3 class="section-title">Products Management</h3>
+                <p class="section-subtitle">Review and manage all platform products</p>
+            </td>
+            <td>
+                <div class="btn-group">
+                    <a href="{{ path('products_list') }}" class="btn btn-primary">
+                        <i class="fas fa-box-open"></i> View All Products
+                    </a>
+                    <a href="#" class="btn btn-secondary">
+                        <i class="fas fa-flag"></i> Flagged Products
+                    </a>
+                    <a href="#" class="btn btn-secondary">
+                        <i class="fas fa-clock"></i> Pending Approval
+                    </a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+{% endblock %}
