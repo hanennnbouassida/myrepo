@@ -2,8 +2,144 @@
 
 {% block title %}Log in!{% endblock %}
 
+
 {% block content %}
-<form method="post">
+<style>
+        /* General Body Styles */
+
+
+/* Login Form Container */
+.login-form {
+    background-color: white; /* Form background */
+    border: 2px solid black; /* Black border around the form */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+     max-width: 400px; /* Limit width */
+    width: 100%; /* Allow responsiveness */
+}
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: white;
+}
+
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Keeps it centered without affecting header/footer */
+    padding: 20px;
+}
+
+
+/* Title Style */
+h1 {
+    font-size: 24px;
+    color: black; /* Black text color */
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Form Group Styles */
+.form-group {
+    margin-bottom: 15px; /* Spacing between form elements */
+}
+
+/* Input Field Styles */
+input[type="email"],
+input[type="password"] {
+    width: 80%; /* Full width */
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 4px;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: black; /* Black border on focus */
+    outline: none; /* Remove default outline */
+}
+
+
+/* Alert Style */
+.alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+/* Social Icons Styling */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.social-icons a {
+    margin: 0 10px; /* Spacing between icons */
+    text-decoration: none; /* Remove underline for links */
+    color: black; /* Black color for icons */
+}
+
+.social-icons a:hover {
+    color: gray; /* Change color on hover */
+}
+
+/* Password Visibility Toggle */
+.password-field {
+   width: 80%; /* Full width */
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 4px;
+    
+}
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    color: #888;
+    user-select: none;
+}
+.btn-login {
+       background-color: transparent; /* Transparent for outlined effect */
+    border: 2px solid black;      /* Black border */
+    color: black;                 /* Black text */
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 20px;
+    font-weight:20;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: center;
+}
+.btn-login:hover {
+    background-color: black;      /* Fill with black on hover */
+    color: #0ca49a;  
+                  
+}
+    </style>
+
+    <script>
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById("inputPassword");
+        const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+        passwordInput.setAttribute("type", type);
+    }
+</script>
+
+<div class="login-wrapper">
+
+<form method="post" class="login-form">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
@@ -15,17 +151,36 @@
     {% endif %}
 
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+    
+    <div class="form-group">
+        <label for="inputEmail">Email</label> <br>
+        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" placeholder="email@gmail.com" required autofocus>
+    </div>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
 
-    <button class="btn btn-lg btn-primary" type="submit">
+    <label for="password-field">Password</label>
+<div class="form-group password-field">
+    
+        <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" placeholder="Enter your password" required>
+        <span class="toggle-password" onclick="togglePasswordVisibility()">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
+  <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+  <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+</svg>        </span>
+</div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+   <div style="display: flex; justify-content: center; margin-top: 20px;">
+    <button class="btn-login" type="submit">
         Sign in
     </button>
+</div>
+
+
+
+    </div>
+
 </form>
+
+
 {% endblock %}

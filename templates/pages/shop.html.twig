@@ -10,26 +10,70 @@
       <!-- Product List -->
       <div class="product-list">
     {% for product in products %}
+        {% if product.status == 'approved' %}
         <div class="product-item">
-            <img src="{{ asset('uploads/products/' ~ product.imageproduct) }}" alt="{{ product.getProductName }}" width="50" height="50">
+            <a href="{{ path('product_details', {'id': product.id}) }}">
+              <img src="{{ asset('uploads/products/' ~ product.imageproduct) }}" alt="{{ product.getProductName }}" width="50" height="50">
+            </a>
             <h3>{{ product.getProductName }}</h3>
             
-            {% if product.discountPercentage > 0 %}
+            <!-- Stock Availability Badge -->
+            {% if product.qte == 0 %}
+                            <p style="color: red; font-weight: bold;">✗ Out of Stock</p>
+
+            {% else %}
+                            <p style="color: green; font-weight: bold;">✓ Available</p>
+
+            {% endif %}
+            
+{% if product.discountPercentage > 0 and product.promotionEndDate and product.promotionEndDate|date > "now"|date %}
                 <p style="color: red;">-{{ product.discountPercentage }}% OFF</p>
                 <p>
-                    <s>{{ product.price }} TND</s> 
-                    <strong>{{ (product.price * (1 - product.discountPercentage / 100))|number_format(2, '.', ',') }} TND</strong>
+                    <s>{{ product.price }} DT</s> 
+                    <strong>{{ (product.price * (1 - product.discountPercentage / 100))|number_format(2, '.', ',') }} DT</strong>
                 </p>
             {% else %}
-                <p>{{ product.price }} TND</p>
+                <p>{{ product.price }} DT</p>
             {% endif %}
             
             <p>{{ product.getProductDescription }}</p>
-            <button>View Details</button>
-            <button onclick="location.href='{{ path('cart_add', {'id': product.id}) }}'">Add To Cart</button>
+
+            <!-- Business Information -->
+            <div class="business-info">
+                <h4>Business Owner: {{ product.business.businessName }}</h4>
+        <img src="data:image/jpeg;base64,{{ product.business.logoBase64 }}" alt="{{ product.business.businessName }} Logo"  style="width: 30px; height: 30px; border-radius: 50%;">
+                <p>Phone: {{ product.business.phone }}</p>
+                <p>Socials: 
+                    <a href="{{ product.business.getFbLink }}" target="_blank">Facebook</a> | 
+                    <a href="{{ product.business.getIgTT }}" target="_blank">Instagram</a> |
+                     <a href="{{ product.business.getTtLink }}" target="_blank">TikTok</a>
+
+                </p>
+            </div>
+
+            <div class="boutonet" style="display: flex; gap: 10px; align-items: center;">
+
+                <button class="styled-button" onclick="location.href='{{ path('product_details', {'id': product.id}) }}'">
+    <img src="/assets/icons/chevron.png" alt="details Icon" class="cart-icon"> 
+    View Details
+</button>
+                
+            {% if product.qte > 0 %}
+                    <button class="styled-button" onclick="location.href='{{ path('cart_add', {'id': product.id}) }}'">
+                        <img src="/assets/icons/cart2.png" alt="Cart Icon" class="cart-icon">
+                        ADD TO CART
+                    </button>
+                {% else %}
+                    <button class="styled-button" style="background-color: #cccccc; cursor: not-allowed;" disabled>
+                        <img src="/assets/icons/cart2.png" alt="Cart Icon" class="cart-icon">
+                        OUT OF STOCK
+                    </button>
+                {% endif %}
+            </div>
         </div>
+        {% endif %}
     {% else %}
-        <p>No products found for the selected filters.</p>
+        <p>No  products found.</p>
     {% endfor %}
 </div> 
 
@@ -77,6 +121,52 @@
 
     .pagination {
       justify-content: center;
+    }
+    /*add to cart bt*/
+   
+
+.cart-icon {
+    width: 25px; /* Adjust icon size */
+    height: 25px; /* Adjust icon size */
+    margin-right: 10px; /* Spacing between icon and text */
+}
+/* view details bt */
+.styled-button {
+  background-color: #242526; /* Dark background */
+    color: white; /* White text */
+    border: none; /* No border */
+    border-radius: 25px; /* Rounded corners */
+    padding: 10px 20px; /* Padding */
+    font-size: 16px; /* Font size */
+    display: flex; /* Flexbox for alignment */
+    align-items: center; /* Center vertically */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s; /* Transition effect */
+
+    /* Shadow & Elevation */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5), /* Base shadow */
+              0 1px 3px rgba(0, 0, 0, 0.5); /* Subtle secondary shadow */
+}
+
+
+.styled-button:hover {
+    background-color:rgb(94, 95, 96); /* Change background on hover */
+    color: #0ca49a;
+     box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15), 
+              0 3px 6px rgba(0, 0, 0, 0.1);
+                transform: translateY(-2px);
+
+}
+
+.styled-button:active {
+  /* Pressed-down effect */
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+} 
+.boutonet {
+        display: flex;
+        gap: 10px;
+        align-items: center;
     }
   </style>
 {% endblock %}

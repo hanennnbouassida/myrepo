@@ -22,6 +22,9 @@ class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($category);
             $entityManager->flush();
+
+            // Redirect to the same route to reset the form
+            return $this->redirectToRoute('add-category');
         }
 
         return $this->render('category/add_category_route.html.twig', [
@@ -54,17 +57,17 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: "categorie_delete")]
-    public function delete( int $id, EntityManagerInterface $entityManager): Response
+    public function delete(int $id, EntityManagerInterface $entityManager): Response
     {
-        $categorie = $entityManager->getRepository(Category::class)->find($id);
+        $category = $entityManager->getRepository(Category::class)->find($id);
 
-        if (!$categorie) {
+        if (!$category) {
             throw $this->createNotFoundException('No category found for id ' . $id);
         }
 
-        $entityManager->remove($categorie);
+        $entityManager->remove($category);
         $entityManager->flush();
         
-        return $this->redirect('dashboard_admin');
+        return $this->redirectToRoute('manage_categories');
     }
 }

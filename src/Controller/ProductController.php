@@ -46,4 +46,18 @@ class ProductController extends AbstractController
 
         return $this->redirectToRoute('products_list');
     }
+
+    #[Route('/product/details/{id}', name: 'product_details', methods: ['GET'])]
+    public function productDetails(int $id, ProductRepository $productRepo): Response
+    {
+        $product = $productRepo->find($id);
+
+        if (!$product) {
+            throw $this->createNotFoundException('Product not found');
+        }
+
+        return $this->render('product/viewdetails.html.twig', [
+            'product' => $product,
+        ]);
+    }
 }

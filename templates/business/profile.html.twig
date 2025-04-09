@@ -4,7 +4,7 @@
 <div class="container-profile">
     <h1>Welcome, {{ business.businessName }}!</h1>
     
-    <!-- Display Business Logo -->
+    <!-- business side -->
     {% if business.logoBase64 %}
         <img src="data:image/jpeg;base64,{{ business.logoBase64 }}" alt="{{ business.businessName }} Logo" class="img-fluid" style="max-width: 200px;">
     {% else %}

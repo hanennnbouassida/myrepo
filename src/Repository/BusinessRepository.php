@@ -16,6 +16,18 @@ class BusinessRepository extends ServiceEntityRepository
         parent::__construct($registry, Business::class);
     }
 
+    // src/Repository/BusinessOwnerRepository.php
+
+public function searchByNameOrDescription(string $query): array
+{
+    return $this->createQueryBuilder('b')
+        ->where('b.businessName LIKE :query')
+        ->orWhere('b.description LIKE :query')
+        ->setParameter('query', '%' . $query . '%')
+        ->getQuery()
+        ->getResult();
+}
+
     //    /**
     //     * @return Business[] Returns an array of Business objects
     //     */

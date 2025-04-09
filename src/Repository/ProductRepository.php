@@ -40,4 +40,17 @@ class ProductRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    // src/Repository/ProductRepository.php
+
+public function searchByNameOrDescription(string $query): array
+{
+    return $this->createQueryBuilder('p')
+        ->where('p.product_name LIKE :query')
+        ->orWhere('p.product_description LIKE :query')
+        ->setParameter('query', '%' . $query . '%')
+        ->getQuery()
+        ->getResult();
+}
+
 }

@@ -23,7 +23,7 @@ class BrandController extends AbstractController
         ]);
     }
 
-    #[Route('/business/{id}', name: 'business_profile')]
+    #[Route('/businessprofile/{id}', name: 'business_profile')]
     public function viewBusinessProfile(BusinessRepository $businessRepository, $id): Response
     {
         // Debug the $id to ensure it is being passed correctly
@@ -39,7 +39,7 @@ class BrandController extends AbstractController
         dump($business);
 
         if (!$business) {
-            throw $this->createNotFoundException('Business not found');
+            throw $this->createNotFoundException('Business nottt found');
         }
 
         // Render the business profile page

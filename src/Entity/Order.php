@@ -88,4 +88,9 @@ class Order
         $this->status = $status;
         return $this;
     }
+    public function isNew(): bool
+    {
+        // Replace 'status' and 'new' with the actual property and value indicating a new order
+        return $this->status === 'Pending';
+    }
 }

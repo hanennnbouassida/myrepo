@@ -11,6 +11,7 @@ use DateTimeInterface;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[Vich\Uploadable]
+#[ORM\HasLifecycleCallbacks] // Enable lifecycle callbacks
 class Product
 {
     #[ORM\Id]
@@ -50,7 +51,7 @@ class Product
     #[ORM\JoinColumn(nullable: false)]
     private ?Business $business = null;
 
-    #[ORM\Column(length: 255, options: ["default" => "pending"])] //values : pending, posted, refused
+    #[ORM\Column(length: 255, options: ["default" => "pending"])] //values : pending, approved, refused
     private ?string $status = "pending";
 
     #[ORM\Column(length: 255)]
@@ -69,6 +70,18 @@ class Product
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTimeInterface $promotionEndDate = null;
 //--------------------------------------------------------------------------------
+
+#[ORM\PreUpdate]
+public function updateStockStats(): void
+{
+    if ($this->qte === null || $this->qte == 0) {
+        $this->StockStats = 'out of stock';
+    } else {
+        $this->StockStats = 'available';
+    }
+}
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -187,9 +200,19 @@ class Product
         return $this->qte;
     }
 
-    public function setQte(string $qte): static
+    public function setQte(?string $qte): static
     {
         $this->qte = $qte;
+
+        // Auto-update StockStats
+        if ($qte === null || $qte == 0) {
+            $this->StockStats = 'out of stock';
+        } else {
+            $this->StockStats = 'available';
+        }
+
+        // Mark StockStats as updated
+        $this->updatedAt = new \DateTime();
 
         return $this;
     }

@@ -1,11 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <h1>Orders</h1>
+    <h1>Business Orders</h1>
     <table>
             <thead>
                 <tr>
                     <th>Order ID</th>
+                    <th>Client</th>
+                    <th>Client Phone Number</th>
+                    <th>Client City</th>
+                    <th>Client Full adresss</th>
                     <th>Product</th>
                     <th>Quantity</th>
                     <th>Status</th>
@@ -16,17 +20,29 @@
                 {% for order in orders %}
                     <tr>
                         <td>{{ order.id }}</td>
+                         <td> {{ order.client.nom }} {{ order.client.prenom }}<br></td>
+                        <td>{{ order.client.getNumTel }}</td>
+                        <td>{{ order.client.getVille }}</td>
+                        <td>{{ order.client.adresse }}</td>
                         <td>{{ order.product.getProductName }}</td>
                         <td>{{ order.quantity }}</td>
                         <td>{{ order.status }}</td>
                         <td>
-                            {% if order.status in ['Pending', 'Confirmed'] %}
-                                <form method="post" action="{{ path('update_order_status', {id: order.id}) }}">
-                                    <button name="status" value="Confirmed" class="btn btn-success">Confirm</button>
-                                    <button name="status" value="Denied" class="btn btn-danger">Deny</button>
-                                    <button name="status" value="Canceled" class="btn btn-warning">Cancel</button>
-                                    <button name="status" value="Delayed" class="btn btn-secondary">Delay</button>
-                                </form>
+                            {% if order.status == 'Pending' %}
+                                <form method="post" action="{{ path('update_order_status', {id: order.id}) }}" class="order-actions-form">
+    <button type="submit" name="status" value="Confirmed" class="btn btn-success">
+        <i class="fas fa-check-circle"></i> Confirm
+    </button>
+    <button type="submit" name="status" value="Denied" class="btn btn-danger">
+        <i class="fas fa-times-circle"></i> Deny
+    </button>
+    <button type="submit" name="status" value="Canceled" class="btn btn-warning">
+        <i class="fas fa-ban"></i> Cancel
+    </button>
+    <button type="submit" name="status" value="Delayed" class="btn btn-secondary">
+        <i class="fas fa-clock"></i> Delay
+    </button>
+</form>
                             {% else %}
                                 <p>No actions available</p>
                             {% endif %}
@@ -35,4 +51,162 @@
                 {% endfor %}
             </tbody>
         </table>
+        
+<style>/* Style for the orders table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff; /* White background for the table */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for table headers */
+th {
+    background-color: #0ca49a; /* Header background color */
+    color: #ffffff; /* White text color */
+    padding: 10px;
+    text-align: left;
+}
+
+/* Style for table data */
+td {
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0; /* Light gray border for rows */
+}
+
+/* Style for alternating row colors */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1; /* Hover effect for rows */
+}
+
+/* Style for the total price section */
+p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #0ca49a; /* Color for the total price text */
+    text-align: right;
+    margin-top: 20px;
+}
+
+/* Style for headings */
+h1, h2 {
+    color: #0ca49a; /* Color for headings */
+    text-align: center;
+}
+
+/* Style for table cells */
+td, th {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+/* Styling the "No Orders" message */
+td[colspan="5"] {
+    text-align: center;
+    color: #888;
+    font-size: 18px;
+}
+/* Option 1: Direct styling */
+.total-price p {
+    color: red;
+    font-size: 1.2em; /* Optional: slightly larger text */
+}
+
+/* Option 2: More specific class */
+.price-text {
+    color: #ff0000; /* Red color */
+    font-weight: bold;
+}
+
+/* Option 3: If you want a more sophisticated red */
+.total-price strong {
+    color: #d32f2f; /* Darker red */
+    font-size: 1.1em;
+}
+/* Style for buttons */
+/* Base button styles */
+.order-actions-form .btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Button hover effects */
+.order-actions-form .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Button icons */
+.order-actions-form .btn i {
+    font-size: 14px;
+}
+
+/* Specific button colors */
+.order-actions-form .btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.order-actions-form .btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.order-actions-form .btn-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.order-actions-form .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Button hover states */
+.order-actions-form .btn-success:hover {
+    background-color: #218838;
+}
+
+.order-actions-form .btn-danger:hover {
+    background-color: #c82333;
+}
+
+.order-actions-form .btn-warning:hover {
+    background-color: #e0a800;
+}
+
+.order-actions-form .btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 576px) {
+    .order-actions-form .btn {
+        padding: 6px 10px;
+        font-size: 12px;
+        margin-right: 6px;
+        margin-bottom: 6px;
+    }
+    
+    .order-actions-form .btn i {
+        font-size: 12px;
+    }
+}
+</style>
 {% endblock %}

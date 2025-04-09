@@ -1,4 +1,3 @@
-{# templates/stockmanagement.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Stock Management{% endblock %}
@@ -6,29 +5,163 @@
 {% block content %}
     <div class="container">
         <h2>Stock Management</h2>
+        <h2>Stock Management</h2>
         
-        {% for product in products %}
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">{{ product.productName }}</h5>
-                    <p class="card-text">
-                        Current Stock: <span class="badge bg-{{ product.qte > 0 ? 'success' : 'danger' }}">
-                            {{ product.qte }}
-                        </span>
-                    </p>
-                    
-                    <form action="{{ path('stock_management_update', {'id': product.id}) }}" method="post" class="row g-3">
-                        <div class="col-auto">
-                            <input type="number" name="stock_change" class="form-control" min="-{{ product.qte }}" placeholder="Change amount" required>
-                        </div>
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-primary">Update Stock</button>
-                        </div>
-                    </form>
+        <div class="product-grid">
+            {% for product in products %}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.productName }}</h5>
+                        <p class="card-text">
+                            Current Stock: <span class="badge bg-{{ product.qte > 0 ? 'success' : 'danger' }}">
+                                {{ product.qte }}
+                            </span>
+                        </p>
+                        
+                        <form action="{{ path('stock_management_update', {'id': product.id}) }}" method="post" class="row g-3">
+                            <div class="col-auto">
+                                <input type="number" name="stock_change" class="form-control" min="-{{ product.qte }}" placeholder="Change amount" required>
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-primary">Update Stock</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        {% else %}
-            <div class="alert alert-info">No products found for this business.</div>
-        {% endfor %}
+            {% else %}
+                <div class="alert alert-info">No products found for this business.</div>
+            {% endfor %}
+        </div>
     </div>
+
+    <style>
+    /* Stock Management Page Styles */
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+h2 {
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    text-align: center;
+    border-bottom: 2px solid #0ca49a;
+    padding-bottom: 0.5rem;
+}
+
+/* Product Grid Layout */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #ffffff;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card-title {
+    color: #2c3e50;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.card-text {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Stock Badge Styles */
+.badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 50px;
+    font-weight: 600;
+}
+
+.bg-success {
+    background-color: #0ca49a !important;
+}
+
+.bg-danger {
+    background-color: #e74c3c !important;
+}
+
+/* Form Styles */
+.row.g-3 {
+    align-items: center;
+}
+
+.form-control {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    border-color: #0ca49a;
+    box-shadow: 0 0 0 0.25rem rgba(12, 164, 154, 0.25);
+}
+
+.btn-primary {
+    background-color: #0ca49a;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1.25rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0b938a;
+}
+
+/* Alert Styles */
+.alert-info {
+    background-color: #e1f5fe;
+    color: #0288d1;
+    border-radius: 6px;
+    padding: 1rem;
+    text-align: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .row.g-3 {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .col-auto {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .col-auto:last-child {
+        margin-bottom: 0;
+    }
+} </style>
 {% endblock %}

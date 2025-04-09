@@ -3,30 +3,121 @@
 {% block title %}My Orders{% endblock %}
 
 {% block content %}
-<h1>My Orders</h1>
+<h2>Thank you for ordering with us</h2>
+<h2>Your order will be delivered to you soon</h2>
+<h1>Your Orders</h1>
+
+{% set totalPrice = 0 %}
 
 <table>
     <thead>
         <tr>
             <th>Order ID</th>
             <th>Product</th>
+            <th>Price (TND)</th>
             <th>Quantity</th>
             <th>Status</th>
         </tr>
     </thead>
     <tbody>
         {% for order in orders %}
+            {% set totalPrice = totalPrice + (order.product.getPrice() * order.quantity) %}
             <tr>
                 <td>{{ order.id }}</td>
                 <td>{{ order.product.getProductName }}</td>
+                <td>{{ order.product.getPrice() }}</td>
                 <td>{{ order.quantity }}</td>
                 <td>{{ order.status }}</td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">You have no orders.</td>
+                <td colspan="5">You have no orders.</td>
             </tr>
         {% endfor %}
     </tbody>
 </table>
+<div class="total-price">
+{% if orders|length > 0 %}
+    <p class="price-text"><strong>Total Price: {{ totalPrice|number_format(2, '.', ',') }} TND</strong></p>
+{% endif %}
+</div>
+<style>/* Style for the orders table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff; /* White background for the table */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for table headers */
+th {
+    background-color: #0ca49a; /* Header background color */
+    color: #ffffff; /* White text color */
+    padding: 10px;
+    text-align: left;
+}
+
+/* Style for table data */
+td {
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0; /* Light gray border for rows */
+}
+
+/* Style for alternating row colors */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1; /* Hover effect for rows */
+}
+
+/* Style for the total price section */
+p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #0ca49a; /* Color for the total price text */
+    text-align: right;
+    margin-top: 20px;
+}
+
+/* Style for headings */
+h1, h2 {
+    color: #0ca49a; /* Color for headings */
+    text-align: center;
+}
+
+/* Style for table cells */
+td, th {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+/* Styling the "No Orders" message */
+td[colspan="5"] {
+    text-align: center;
+    color: #888;
+    font-size: 18px;
+}
+/* Option 1: Direct styling */
+.total-price p {
+    color: red;
+    font-size: 1.2em; /* Optional: slightly larger text */
+}
+
+/* Option 2: More specific class */
+.price-text {
+    color: #ff0000; /* Red color */
+    font-weight: bold;
+}
+
+/* Option 3: If you want a more sophisticated red */
+.total-price strong {
+    color: #d32f2f; /* Darker red */
+    font-size: 1.1em;
+}
+</style>
 {% endblock %}

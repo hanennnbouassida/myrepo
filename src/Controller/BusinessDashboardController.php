@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 #[IsGranted('ROLE_BUSINESS')]
 class BusinessDashboardController extends AbstractController
@@ -34,6 +35,11 @@ class BusinessDashboardController extends AbstractController
         if (!$business) {
             throw $this->createAccessDeniedException('User not authenticated');
         }
+
+        if ($business->getStatus() !== 'approved') {
+            throw new AccessDeniedHttpException('Your business is not approved yet.');
+        }
+
         $products = $business->getProducts();
         $orders = $business->getOrders(); // Fetch orders associated with the business
 
@@ -167,7 +173,7 @@ class BusinessDashboardController extends AbstractController
         ]);
     }
     //----------------------------------------
-    // ORDER MANAGEMENT
+    // ORDER MANAGEMENT for BUSINESS
 #[Route('/business/orders', name: 'business_orders')]
 public function viewOrders(EntityManagerInterface $entityManager): Response
 {
@@ -182,9 +188,7 @@ public function viewOrders(EntityManagerInterface $entityManager): Response
     return $this->render('business/orders.html.twig', [
         'orders' => $orders,
     ]);
-}
-
-#[Route('/business/order/{id}/update', name: 'update_order_status', methods: ['POST'])]
+}#[Route('/business/order/{id}/update', name: 'update_order_status', methods: ['POST'])]
 public function updateOrderStatus(Request $request, int $id, EntityManagerInterface $entityManager): Response
 {
     $order = $entityManager->getRepository(Order::class)->find($id);
@@ -209,13 +213,30 @@ public function updateOrderStatus(Request $request, int $id, EntityManagerInterf
     }
 
     $order->setStatus($status);
+
+    // ✅ Reduce product quantity only if status is confirmed
+    if ($status === 'Confirmed') {
+        $product = $order->getProduct();
+        if ($product !== null) {
+            $currentStock = $product->getQte();
+            $orderedQuantity = $order->getQuantity();
+
+            if ($currentStock >= $orderedQuantity) {
+                $product->setQte($currentStock - $orderedQuantity);
+            } else {
+                $this->addFlash('error', 'Not enough stock to confirm this order.');
+                return $this->redirectToRoute('business_orders');
+            }
+        }
+    }
+
     $entityManager->flush();
 
     $this->addFlash('success', 'Order status updated successfully.');
-
-    // Redirect back to the orders page to avoid form resubmission
     return $this->redirectToRoute('business_orders');
 }
+
+// STOCK MANAGEMENT for BUSINESS
 
 #[Route('/stock-management/{business_id}', name: 'stock_management')]
 public function index(EntityManagerInterface $em, int $business_id): Response

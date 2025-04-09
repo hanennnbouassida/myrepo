@@ -46,7 +46,7 @@ class Business extends User
     private ?string $phone = null;
 
     #[ORM\Column(type: 'string', length: 255, options: ['default' => 'pending'])]
-    private ?string $status = 'pending';
+    private ?string $status = 'pending'; //values : pending, approved, refused
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $logoBase64 = null;

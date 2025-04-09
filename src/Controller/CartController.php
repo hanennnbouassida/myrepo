@@ -172,7 +172,7 @@ class CartController extends AbstractController
 
         $orders = $entityManager->getRepository(Order::class)->findBy(['client' => $user]);
 
-        return $this->render('business/orders.html.twig', [
+        return $this->render('client/orders.html.twig', [
             'orders' => $orders,
         ]);
     }

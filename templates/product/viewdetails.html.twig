@@ -1,0 +1,187 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product Details{% endblock %}
+
+{% block content %}
+    <div class="product-details-container">
+        <!-- Image Section -->
+        <div class="product-image">
+            <img src="{{ asset('uploads/products/' ~ product.imageproduct) }}" 
+                 alt="{{ product.getProductName() }}" 
+                 class="product-image-img" />
+        </div>
+
+        <!-- Product Details Section -->
+        <div class="product-details">
+            <h1>Product Details</h1>
+            <p><strong>ID:</strong> {{ product.id }}</p>
+            <p><strong>Name:</strong> {{ product.getProductName() }}</p>
+            <p><strong>Description:</strong> {{ product.getProductDescription() }}</p>
+            <p><strong>Price:</strong> {{ product.getPrice() }} TND</p>
+            <p><strong>Quantity:</strong> {{ product.getQte() }}</p>
+            <p><strong>Status:</strong> {{ product.status }}</p>
+            <p><strong>Category:</strong> {{ product.category.getName() }}</p>
+
+            <button class="styled-button" onclick="location.href='{{ path('cart_add', {'id': product.id}) }}'">
+                        <img src="/assets/icons/cart2.png" alt="Cart Icon" class="cart-icon">
+                        ADD TO CART
+                    </button>
+        </div>
+    </div>
+
+    <!-- Business Details Section -->
+    <div class="business-details-container">
+        <h2>Business Details</h2>
+        <div class="business-info">
+            <!-- Business Logo -->
+            <div class="business-logo">
+        <img src="data:image/jpeg;base64,{{ product.business.logoBase64 }}" alt="{{ product.business.businessName }} Logo" class="img-fluid" style="max-width: 400px;">
+                    
+            </div>
+
+            <!-- Business Information -->
+            <div class="business-info-details">
+                <p><strong>Business Name:</strong> {{ product.business.businessName }}</p>
+                <p><strong>Phone Number:</strong> {{ product.business.getPhone }}</p>
+                <p><strong>Social Media:</strong></p>
+                <ul>
+                    <li><a href="{{ product.business.getFbLink }}" target="_blank">Facebook</a></li>
+                    <li><a href="{{ product.business.getTtLink }}" target="_blank">TikTok</a></li>
+                    <li><a href="{{ product.business.getIgTT }}" target="_blank">Instagram</a></li>
+                </ul>
+                <a href="{{ path('business_profile', { id: product.business.id }) }}" class="view-profile-btn">View Profile</a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .product-details-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 50px;
+        }
+
+        .product-image {
+            flex: 1;
+            margin-right: 30px;
+        }
+
+        .product-image-img {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-details {
+            flex: 2;
+            max-width: 60%;
+        }
+
+        .product-details h1 {
+            color: #0ca49a;
+        }
+
+        .product-details p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .business-details-container {
+            margin: 50px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .business-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .business-logo {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .business-logo-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .business-info-details {
+            flex: 3;
+        }
+
+        .business-info-details p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .business-info-details ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .business-info-details ul li {
+            margin-bottom: 5px;
+        }
+
+        .view-profile-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #0ca49a;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .view-profile-btn:hover {
+            background-color: #088f7a;
+        }
+
+        
+/* view details bt */
+.styled-button {
+  background-color: #242526; /* Dark background */
+    color: white; /* White text */
+    border: none; /* No border */
+    border-radius: 25px; /* Rounded corners */
+    padding: 10px 20px; /* Padding */
+    font-size: 16px; /* Font size */
+    display: flex; /* Flexbox for alignment */
+    align-items: center; /* Center vertically */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s; /* Transition effect */
+
+    /* Shadow & Elevation */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5), /* Base shadow */
+              0 1px 3px rgba(0, 0, 0, 0.5); /* Subtle secondary shadow */
+}
+
+
+.styled-button:hover {
+    background-color:rgb(94, 95, 96); /* Change background on hover */
+    color: #0ca49a;
+     box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15), 
+              0 3px 6px rgba(0, 0, 0, 0.1);
+                transform: translateY(-2px);
+
+}
+
+.styled-button:active {
+  /* Pressed-down effect */
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+} 
+    </style>
+{% endblock %}

@@ -21,18 +21,18 @@
                 <li><a href="{{ path('home') }}">Home</a></li>
                 <li><a href="{{ path('shop') }}">Shop</a></li>
                 <li><a href="{{ path('brands') }}">Brands</a></li>
-                <li><a href="{{ path('about') }}">About (Contact)</a></li>
+                <li><a href="{{ path('home') }}#about-section">About (Contact)</a></li>
               
             </ul>
         </nav>
 
-          <!-- Search Bar -->
-    <div class="search-bar">
-        <form action="" method="GET">
-            <input type="text" name="q" placeholder="Search products..." required>
-            <button type="submit"><i class="fas fa-search"></i></button>
-        </form>
-    </div>
+       <div>   <!-- Search Bar -->
+    <form action="{{ path('app_search') }}" method="GET" class="search-bar">
+    <input type="text" name="q" placeholder="Search products or businesses..." required>
+    <button type="submit"><i class="fas fa-search"></i></button>
+</form>             </div>
+
+
 
         <div class="header-actions">
             <div class="shopping-cart">
@@ -42,18 +42,26 @@
     </a>
 </div>
     {#---------------------------------------------------------------------#}
-
-{% if app.user %}
+ {% if app.user %}
         {% if 'ROLE_BUSINESS' in app.user.roles %}
             <!-- Business Dashboard Button -->
-            <div class="dashboard-btn">
+            <div class="shopping-cart">  {# Using same class as other actions #}
                 <a href="{{ path('dashboard_business') }}">
-                    <i class="fas fa-store-alt" style="color: #0ca49a;" ></i> Dashboard
+                    <i class="fas fa-store-alt"></i>
+                    <span>Dashboard</span>
                 </a>
             </div>
-      
+        {% elseif 'ROLE_CLIENT' in app.user.roles %}
+            <!-- Client Orders Button -->
+            <div class="shopping-cart">  {# Using same class as other actions #}
+                <a href="{{ path('client_orders') }}">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>My Orders</span>
+                </a>
+            </div>
         {% endif %}
     {% endif %}
+
     {#---------------------------------------------------------------------#}
            <div class="auth-links">
     {% if app.user %}
@@ -69,6 +77,8 @@
     {# Main Content Block #}
     <main>
         {% block content %}
+        
+
         {% endblock %}
     </main>
 
@@ -101,16 +111,16 @@
                 <li><a href="#">FAQ</a></li>
                 <li><a href="#">Submit a Ticket</a></li>
                 <li><a href="#">Theme Tweak</a></li>
+                <li><a href="#">Guide</a></li>
             </ul>
         </div>
 
         <!-- Resources Section -->
         <div class="footer-section resources-section">
-            <h3 class="footer-title">Resources</h3>
+            <h3 class="footer-title">Terms and Policies</h3>
             <ul class="footer-menu">
-                <li><a href="#">Showcase</a></li>
-                <li><a href="#">WidgetKit</a></li>
-                <li><a href="#">Affiliates</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Privacy Policy</a></li>
             </ul>
         </div>
 
@@ -123,7 +133,22 @@
             </div>
         </div>
     </div>
+ <div class="footer-section social-section">
+            <h3 class="footer-title">Follow Us</h3>
+            <div class="social-links">
+    <a href="https://facebook.com" target="_blank">
+        <img src="{{ asset('assets/socials/fb.png') }}" alt="Facebook">
+    </a>
+    <a href="https://instagram.com" target="_blank">
+        <img src="{{ asset('assets/socials/ig.png') }}" alt="Instagram">
+    </a>
+    <a href="https://linkedin.com" target="_blank">
+        <img src="{{ asset('assets/socials/li.png') }}" alt="LinkedIn">
+    </a>
+</div>
 
+            <p style=" text-align: center">Stay connected for updates</p>
+        </div>
     <!-- Copyright Section -->
     <div class="footer-bottom">
         <div class="footer-legal">
@@ -154,8 +179,42 @@
     background-color:rgb(255, 255, 255);     /* Fill with color on hover */
     color: white;                 /* Text changes to white */
 } 
-.dashboard-btn{
 
+
+.social-links img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain; /* Ensures the image scales properly without distortion */
+    margin-right: 10px; /* Adds spacing between icons */
+    cursor: pointer; /* Makes it clear that the icons are clickable */
 }
+.social-links {
+    display: flex;
+    justify-content: center;  /* Centers the icons horizontally */
+    align-items: center;      /* Centers the icons vertically */
+    gap: 15px;                /* Optional: Adds space between icons */
+}
+
+/* Smooth scrolling for better UX */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Style the target section */
+.about-us-section {
+  padding: 80px 0;
+  background: #f9f9f9;
+}
+
+/* Highlight when navigated to */
+.about-us-section:target {
+  animation: highlight 2s ease;
+}
+
+@keyframes highlight {
+  0% { background: #fff9e6; }
+  100% { background: #f9f9f9; }
+}
+
 </style>
 </html>

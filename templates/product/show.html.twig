@@ -3,23 +3,92 @@
 {% block title %}Product Details{% endblock %}
 
 {% block content %}
-    <h1>Product Details</h1>
-    <p>ID: {{ product.id }}</p>
-    <p>Name: {{ product.getProductName() }}</p>
-    <p>Description: {{ product.getProductDescription }}</p>
-    <p>Price: {{ product.getPrice }}</p>
-    <p>Quantity: {{ product.getQte }}</p>
-    <p>Status: {{ product.status }}</p>
-    <p>Category: {{ product.category.getName() }}</p>
-    
-    <div>
-    <img src="{{ asset('uploads/products/' ~ product.imageproduct) }}" 
-         alt="{{ product.getProductName() }}" 
-         style="width: 150px; height: 150px; object-fit: cover;" />
-</div>
+    <div class="product-details-container">
+        <!-- Image Section -->
+        <div class="product-image">
+            <img src="{{ asset('uploads/products/' ~ product.imageproduct) }}" 
+                 alt="{{ product.getProductName() }}" 
+                 class="product-image-img" />
+        </div>
 
+        <!-- Product Details Section -->
+        <div class="product-details">
+            <h1>Product Details</h1>
+            <p><strong>ID:</strong> {{ product.id }}</p>
+            <p><strong>Name:</strong> {{ product.getProductName() }}</p>
+            <p><strong>Description:</strong> {{ product.getProductDescription() }}</p>
+            <p><strong>Price:</strong> {{ product.getPrice() }} TND</p>
+            <p><strong>Quantity:</strong> {{ product.getQte() }}</p>
+            <p><strong>Status:</strong> {{ product.status }}</p>
+            <p><strong>Category:</strong> {{ product.category.getName() }}</p>
 
+            <div class="product-buttons">
+                <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-primary">Edit</a>
+                <a href="{{ path('dashboard_business') }}" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+    <style>
+        .product-details-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 50px;
+        }
 
-    <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-primary">Edit</a>
-    <a href="{{ path('dashboard_business') }}" class="btn btn-secondary">Back to Dashboard</a>
+        .product-image {
+            flex: 1;
+            margin-right: 30px;
+        }
+
+        .product-image-img {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-details {
+            flex: 2;
+            max-width: 60%;
+        }
+
+        .product-details h1 {
+            color: #0ca49a;
+        }
+
+        .product-details p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .product-buttons a {
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .product-buttons .btn-primary {
+            background-color: #0ca49a;
+            color: white;
+        }
+
+        .product-buttons .btn-primary:hover {
+            background-color: #0a8c7f;
+        }
+
+        .product-buttons .btn-secondary {
+            background-color: #f1f1f1;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .product-buttons .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
 {% endblock %}
