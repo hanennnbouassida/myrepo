@@ -134,6 +134,12 @@
         </a>
     </div>
 
+    <div class="report">
+        <a href="{{ path('business_report_problem') }}" class="btn btn-outline">
+            <i class="fas fa-exclamation-circle"></i> Report a Problem
+        </a>
+    </div>
+
     <!-- Analytics Section -->
     <div class="dashboard-section">
         <h2>Sales Analytics</h2>
@@ -156,6 +162,8 @@
         </div>
     </div>
 </div>
+
+
 <style>
     /* ===== DASHBOARD LAYOUT ===== */
     .dashboard-container {
@@ -463,5 +471,40 @@
         background-color: rgba(220, 53, 69, 0.1);
         color: #c82333;
     }
+    .report .btn {
+    /* Basic styling */
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    
+    /* Report button specific colors */
+    color: #d32f2f; /* Dark red text */
+    border: 1px solid #d32f2f;
+    background-color: rgba(211, 47, 47, 0.1); /* Light red background */
+    
+    /* Icon spacing */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.report .btn:hover {
+    /* Hover state */
+    background-color: rgba(211, 47, 47, 0.2);
+    box-shadow: 0 2px 4px rgba(211, 47, 47, 0.2);
+}
+
+.report .btn:active {
+    /* Click state */
+    background-color: rgba(211, 47, 47, 0.3);
+    transform: translateY(1px);
+}
+
+.report .btn i {
+    /* Icon styling */
+    font-size: 1.1em;
+}
 </style>
 {% endblock %}

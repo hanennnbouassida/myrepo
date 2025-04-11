@@ -15,6 +15,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 #[IsGranted('ROLE_BUSINESS')]
 class BusinessDashboardController extends AbstractController
@@ -293,5 +295,35 @@ public function updateStock(Request $request, EntityManagerInterface $em, int $i
     return $this->redirectToRoute('stock_management', [
         'business_id' => $loggedInBusiness->getId(),
     ]);
+}
+//report problemuse App\Entity\Business;
+
+#[Route('/business/report', name: 'business_report_problem')]
+public function reportProblem(Request $request, MailerInterface $mailer): Response
+{
+    /** @var Business $business */
+    $business = $this->getUser();
+    
+    if (!$business) {
+        throw $this->createAccessDeniedException('You must be logged in.');
+    }
+
+    if ($request->isMethod('POST')) {
+        $subject = $request->request->get('subject');
+        $message = $request->request->get('message');
+
+        $email = (new Email())
+            ->from($business->getEmail()) // Now recognized
+            ->to('hanenbouassida456@gmail.com')
+            ->subject("Problem Report: $subject")
+            ->text("From: {$business->getBusinessName()} ({$business->getEmail()})\n\n$message");
+
+        $mailer->send($email);
+
+        $this->addFlash('success', 'Your report has been sent to the admin.');
+        return $this->redirectToRoute('business_dashboard');
+    }
+
+    return $this->render('business/report_problem.html.twig');
 }
 }
